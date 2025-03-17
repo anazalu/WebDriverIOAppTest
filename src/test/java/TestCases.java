@@ -3,27 +3,35 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
+import org.openqa.selenium.By;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 import org.testng.annotations.*;
 
 import utils.DriverMethods;
-//import utils.MyCustomListener;
+import utils.MyCustomListener;
 import utils.TestProperties;
 
 import java.io.File;
 import java.time.Duration;
 import java.util.Map;
 
-//import static reports.ExtentTestManager.getTest;
+import screens.BottomNavigation;
+import screens.LoginScreen;
 
-//@Listeners(MyCustomListener.class)
+import static reports.ExtentTestManager.getTest;
+
+@Listeners(MyCustomListener.class)
 public class TestCases {
 
     public AppiumDriverLocalService server;
     public AndroidDriver driver;
     public WebDriverWait wait;
+
+    public BottomNavigation bottomNavigation;
+    public LoginScreen loginScreen;
 
     @BeforeClass(alwaysRun = true)
     public void beforeClassSetup() {
@@ -44,7 +52,8 @@ public class TestCases {
 
         DriverMethods.setDriver(driver);
 
-//        loginScreen = new LoginScreen(driver);
+        bottomNavigation = new BottomNavigation(driver);
+        loginScreen = new LoginScreen(driver);
 
     }
 
@@ -60,11 +69,12 @@ public class TestCases {
         DriverMethods.getScreenshot();
     }
 
-    @Test(testName = "Open app")
-    public void testHomePage() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(new AppiumBy.ByAndroidUIAutomator("new UiSelector().text(\"Webview\")")));
-        DriverMethods.logScreenShot();
-        DriverMethods.getScreenshot();
+    @Test(testName = "Login and Register Flow")
+    public void testLogin() {
+        Assert.assertTrue(bottomNavigation.isDisplayed());
+        bottomNavigation.tapLoginIcon();
+        Assert.assertTrue(loginScreen.isDisplayed());
+
     }
 
     @AfterMethod(alwaysRun = true)
