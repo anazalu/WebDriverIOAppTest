@@ -117,6 +117,6 @@ public class DriverMethods {
 //                Map.entry("args", "ro.product.brand"),
                 Map.entry("args", "ro.product.build.version.release")
         ));
-        return deviceManufacturer + " " + deviceModel + " " + deviceOSVersion;
+        return "Device Manufacturer: " + deviceManufacturer + "Model: " + deviceModel + "OS Version: " + deviceOSVersion;
     }
 }
