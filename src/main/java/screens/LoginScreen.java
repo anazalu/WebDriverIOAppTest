@@ -12,6 +12,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 public class LoginScreen {
@@ -61,6 +62,15 @@ public class LoginScreen {
 
     public String getSuccessMessage() {
         return wait.until(ExpectedConditions.visibilityOf(successMessage)).getText();
+    }
+
+    public List<String> getFailureMessages() {
+        wait.until(ExpectedConditions.visibilityOf(messages.get(1)));
+        List<String> messageTexts = new ArrayList<>();
+        for (WebElement message : messages) {
+            messageTexts.add(message.getText());
+        }
+        return messageTexts;
     }
 
 }

@@ -69,15 +69,28 @@ public class TestCases {
         DriverMethods.getScreenshot();
     }
 
-    @Test(testName = "Login and Register Flow",
-        dataProvider = "valid-credentials",
+    @Test(testName = "Login with valid credentials",
+        description = "Login test",
+        dataProvider = "valid-login",
         dataProviderClass = Data.class)
-    public void testLogin(Credentials credentials) {
+    public void testLoginValidCredentials(Credentials credentials) {
+//        getTest().info("User logs in");
         Assert.assertTrue(bottomNavigation.isDisplayed());
         bottomNavigation.tapLoginIcon();
         Assert.assertTrue(loginScreen.isDisplayed());
         loginScreen.loginUser(credentials.getEmail(), credentials.getPassword());
         Assert.assertEquals(loginScreen.getSuccessMessage(), "Success", "Login failed.");
+    }
+
+    @Test(testName = "Login with invalid credentials",
+        dataProvider = "invalid-login",
+        dataProviderClass = Data.class)
+    public void testLoginInvalidCredentials(Credentials credentials) {
+        Assert.assertTrue(bottomNavigation.isDisplayed());
+        bottomNavigation.tapLoginIcon();
+        Assert.assertTrue(loginScreen.isDisplayed());
+        loginScreen.loginUser(credentials.getEmail(), credentials.getPassword());
+        Assert.assertTrue(loginScreen.getFailureMessages().contains(credentials.getMessage()), "Error message not displayed.");
 
     }
 
