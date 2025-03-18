@@ -3,12 +3,16 @@ package screens;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
+import io.appium.java_client.pagefactory.HowToUseLocators;
+import io.appium.java_client.pagefactory.LocatorGroupStrategy;
+import org.checkerframework.checker.units.qual.A;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.List;
 
 public class LoginScreen {
     private AndroidDriver driver;
@@ -16,6 +20,26 @@ public class LoginScreen {
 
     @AndroidFindBy(uiAutomator = "new UiSelector().text(\"Login / Sign up Form\")")
     private WebElement loginScreenTextView;
+
+    @HowToUseLocators(androidAutomation = LocatorGroupStrategy.ALL_POSSIBLE)
+    @AndroidFindBy(uiAutomator = "new UiSelector().text(\"Email\")", priority = 1)
+    @AndroidFindBy(accessibility = "input-email")
+    private WebElement emailField;
+
+    @AndroidFindBy(xpath = "//android.widget.EditText[@content-desc=\"input-password\"]")
+    private WebElement passwordField;
+
+    @HowToUseLocators(androidAutomation = LocatorGroupStrategy.ALL_POSSIBLE)
+    @AndroidFindBy(uiAutomator = "new UiSelector().text(\"LOGIN\")")
+    @AndroidFindBy(xpath = "//android.widget.TextView[@text=\"LOGIN\"]")
+    private WebElement loginButton;
+
+    @AndroidFindBy(xpath = "//android.widget.TextView[preceding-sibling::android.view.ViewGroup[android.widget.EditText[@content-desc=\"input-email\"]]]")
+    private List<WebElement> messages;
+
+    @AndroidFindBy(id = "android:id/alertTitle")
+    private WebElement successMessage;
+
 
     public LoginScreen(AndroidDriver driver) {
         this.driver = driver;
@@ -26,4 +50,17 @@ public class LoginScreen {
     public boolean isDisplayed() {
         return wait.until(ExpectedConditions.visibilityOf(loginScreenTextView)).isDisplayed();
     }
+
+    public void loginUser(String email, String password) {
+        wait.until(ExpectedConditions.visibilityOf(emailField)).clear();
+        wait.until(ExpectedConditions.visibilityOf(emailField)).sendKeys(email);
+        wait.until(ExpectedConditions.visibilityOf(passwordField)).clear();
+        wait.until(ExpectedConditions.visibilityOf(passwordField)).sendKeys(password);
+        wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
+    }
+
+    public String getSuccessMessage() {
+        return wait.until(ExpectedConditions.visibilityOf(successMessage)).getText();
+    }
+
 }

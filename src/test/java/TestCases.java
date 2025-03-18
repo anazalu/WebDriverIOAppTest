@@ -1,3 +1,4 @@
+import dataObjects.Credentials;
 import io.appium.java_client.AppiumBy;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
@@ -35,7 +36,6 @@ public class TestCases {
 
     @BeforeClass(alwaysRun = true)
     public void beforeClassSetup() {
-//        server = AppiumDriverLocalService.buildDefaultService();
         AppiumServiceBuilder appiumServiceBuilder = new AppiumServiceBuilder();
         appiumServiceBuilder.usingPort(4724);
         appiumServiceBuilder.withLogFile(new File("appium-server-logs.log"));
@@ -69,11 +69,15 @@ public class TestCases {
         DriverMethods.getScreenshot();
     }
 
-    @Test(testName = "Login and Register Flow")
-    public void testLogin() {
+    @Test(testName = "Login and Register Flow",
+        dataProvider = "valid-credentials",
+        dataProviderClass = Data.class)
+    public void testLogin(Credentials credentials) {
         Assert.assertTrue(bottomNavigation.isDisplayed());
         bottomNavigation.tapLoginIcon();
         Assert.assertTrue(loginScreen.isDisplayed());
+        loginScreen.loginUser(credentials.getEmail(), credentials.getPassword());
+        Assert.assertEquals(loginScreen.getSuccessMessage(), "Success", "Login failed.");
 
     }
 

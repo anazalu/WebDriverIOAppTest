@@ -27,7 +27,8 @@ public class MyCustomListener implements ITestListener {
 
     @Override
     public void onTestStart(ITestResult result) {
-        ExtentTestManager.startTest(result.getName(), result.getTestContext().toString());
+        startTest(result.getName(), result.getTestContext().toString());
+        getTest().info("Test starts");
     }
 
     @Override
