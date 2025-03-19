@@ -5,6 +5,7 @@ import lombok.Getter;
 public class Credentials {
     private String email;
     private String password;
+    private String repeatPassword;
     private String message;
 
     public Credentials(String email, String password) {
@@ -18,6 +19,13 @@ public class Credentials {
         this.message = message;
     }
 
+    public Credentials(String email, String password, String repeatPassword, String message) {
+        this.email = email;
+        this.password = password;
+        this.repeatPassword = repeatPassword;
+        this.message = message;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -28,5 +36,9 @@ public class Credentials {
 
     public String getMessage() {
         return message;
+    }
+
+    public String getRepeatPassword() {
+        return repeatPassword;
     }
 }

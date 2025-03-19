@@ -1,12 +1,9 @@
 import dataObjects.Credentials;
-import io.appium.java_client.AppiumBy;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
-import org.openqa.selenium.By;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.*;
@@ -20,9 +17,7 @@ import java.time.Duration;
 import java.util.Map;
 
 import screens.BottomNavigation;
-import screens.LoginScreen;
-
-import static reports.ExtentTestManager.getTest;
+import screens.LoginAndSignUpScreen;
 
 @Listeners(MyCustomListener.class)
 public class TestCases {
@@ -32,7 +27,7 @@ public class TestCases {
     public WebDriverWait wait;
 
     public BottomNavigation bottomNavigation;
-    public LoginScreen loginScreen;
+    public LoginAndSignUpScreen loginAndSignUpScreen;
 
     @BeforeClass(alwaysRun = true)
     public void beforeClassSetup() {
@@ -53,7 +48,7 @@ public class TestCases {
         DriverMethods.setDriver(driver);
 
         bottomNavigation = new BottomNavigation(driver);
-        loginScreen = new LoginScreen(driver);
+        loginAndSignUpScreen = new LoginAndSignUpScreen(driver);
 
     }
 
@@ -70,28 +65,44 @@ public class TestCases {
     }
 
     @Test(testName = "Login with valid credentials",
+        groups = {"smoke", "login"},
         description = "Login test",
-        dataProvider = "valid-login",
+        dataProvider = "valid-login-signup",
         dataProviderClass = Data.class)
     public void testLoginValidCredentials(Credentials credentials) {
 //        getTest().info("User logs in");
         Assert.assertTrue(bottomNavigation.isDisplayed());
         bottomNavigation.tapLoginIcon();
-        Assert.assertTrue(loginScreen.isDisplayed());
-        loginScreen.loginUser(credentials.getEmail(), credentials.getPassword());
-        Assert.assertEquals(loginScreen.getSuccessMessage(), "Success", "Login failed.");
+        Assert.assertTrue(loginAndSignUpScreen.isDisplayed());
+        loginAndSignUpScreen.loginUser(credentials.getEmail(), credentials.getPassword());
+        Assert.assertEquals(loginAndSignUpScreen.getSuccessMessage(), "Success", "Login failed.");
     }
 
     @Test(testName = "Login with invalid credentials",
+        groups = {"login"},
         dataProvider = "invalid-login",
         dataProviderClass = Data.class)
     public void testLoginInvalidCredentials(Credentials credentials) {
         Assert.assertTrue(bottomNavigation.isDisplayed());
         bottomNavigation.tapLoginIcon();
-        Assert.assertTrue(loginScreen.isDisplayed());
-        loginScreen.loginUser(credentials.getEmail(), credentials.getPassword());
-        Assert.assertTrue(loginScreen.getFailureMessages().contains(credentials.getMessage()), "Error message not displayed.");
+        Assert.assertTrue(loginAndSignUpScreen.isDisplayed());
+        loginAndSignUpScreen.loginUser(credentials.getEmail(), credentials.getPassword());
+        Assert.assertTrue(loginAndSignUpScreen.getFailureMessages().contains(credentials.getMessage()), "Error message not displayed.");
 
+    }
+
+    @Test(testName = "Sign up with valid credentials",
+            groups = {"smoke", "signup"},
+            dataProvider = "valid-login-signup",
+            dataProviderClass = Data.class)
+    public void testSignUpValidCredentials(Credentials credentials) {
+        Assert.assertTrue(bottomNavigation.isDisplayed());
+        bottomNavigation.tapLoginIcon();
+        Assert.assertTrue(loginAndSignUpScreen.isDisplayed(), "Failed to open Login and Signup screen.");
+        loginAndSignUpScreen.switchToSignUp();
+        Assert.assertTrue(loginAndSignUpScreen.singUpViewIsDisplayed(), "Failed to switch to Sign Up view.");
+        loginAndSignUpScreen.signUpUser(credentials.getEmail(), credentials.getPassword());
+        Assert.assertEquals(loginAndSignUpScreen.getSuccessMessage(), "Signed Up!", "Sign up failed.");
     }
 
     @AfterMethod(alwaysRun = true)

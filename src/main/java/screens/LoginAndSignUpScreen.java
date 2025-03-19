@@ -15,7 +15,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LoginScreen {
+public class LoginAndSignUpScreen {
     private AndroidDriver driver;
     private WebDriverWait wait;
 
@@ -41,8 +41,17 @@ public class LoginScreen {
     @AndroidFindBy(id = "android:id/alertTitle")
     private WebElement successMessage;
 
+    @AndroidFindBy(accessibility = "button-sign-up-container")
+    private WebElement signUpToggle;
 
-    public LoginScreen(AndroidDriver driver) {
+    @AndroidFindBy(accessibility = "input-repeat-password")
+    private WebElement repeatPasswordField;
+
+    @AndroidFindBy(uiAutomator = "new UiSelector().description(\"button-SIGN UP\")")
+    private WebElement signUpButton;
+
+
+    public LoginAndSignUpScreen(AndroidDriver driver) {
         this.driver = driver;
         PageFactory.initElements(new AppiumFieldDecorator(this.driver), this);
         this.wait = new WebDriverWait(this.driver, Duration.ofSeconds(5));
@@ -52,12 +61,30 @@ public class LoginScreen {
         return wait.until(ExpectedConditions.visibilityOf(loginScreenTextView)).isDisplayed();
     }
 
+    public void switchToSignUp() {
+        wait.until(ExpectedConditions.visibilityOf(signUpToggle)).click();
+    }
+
+    public boolean singUpViewIsDisplayed() {
+        return wait.until(ExpectedConditions.visibilityOf(repeatPasswordField)).isDisplayed();
+    }
+
     public void loginUser(String email, String password) {
         wait.until(ExpectedConditions.visibilityOf(emailField)).clear();
         wait.until(ExpectedConditions.visibilityOf(emailField)).sendKeys(email);
         wait.until(ExpectedConditions.visibilityOf(passwordField)).clear();
         wait.until(ExpectedConditions.visibilityOf(passwordField)).sendKeys(password);
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
+    }
+
+    public void signUpUser(String email, String password) {
+        wait.until(ExpectedConditions.visibilityOf(emailField)).clear();
+        wait.until(ExpectedConditions.visibilityOf(emailField)).sendKeys(email);
+        wait.until(ExpectedConditions.visibilityOf(passwordField)).clear();
+        wait.until(ExpectedConditions.visibilityOf(passwordField)).sendKeys(password);
+        wait.until(ExpectedConditions.visibilityOf(repeatPasswordField)).clear();
+        wait.until(ExpectedConditions.visibilityOf(repeatPasswordField)).sendKeys(password);
+        wait.until(ExpectedConditions.visibilityOf(signUpButton)).click();
     }
 
     public String getSuccessMessage() {
