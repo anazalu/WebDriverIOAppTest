@@ -5,8 +5,9 @@
 <!--        <parameter name="username" value="standard_user"/>-->
         <groups>
             <run>
-                <include name="smoke"/>
+<!--                <include name="smoke"/>-->
 <!--                <include name="login"/>-->
+                <include name="signup"/>
             </run>
         </groups>
         <classes>

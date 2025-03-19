@@ -77,13 +77,13 @@ public class LoginAndSignUpScreen {
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
     }
 
-    public void signUpUser(String email, String password) {
+    public void signUpUser(String email, String password, String repeatPassword) {
         wait.until(ExpectedConditions.visibilityOf(emailField)).clear();
         wait.until(ExpectedConditions.visibilityOf(emailField)).sendKeys(email);
         wait.until(ExpectedConditions.visibilityOf(passwordField)).clear();
         wait.until(ExpectedConditions.visibilityOf(passwordField)).sendKeys(password);
         wait.until(ExpectedConditions.visibilityOf(repeatPasswordField)).clear();
-        wait.until(ExpectedConditions.visibilityOf(repeatPasswordField)).sendKeys(password);
+        wait.until(ExpectedConditions.visibilityOf(repeatPasswordField)).sendKeys(repeatPassword);
         wait.until(ExpectedConditions.visibilityOf(signUpButton)).click();
     }
 

@@ -26,6 +26,24 @@ public class Data {
                         "password",
                         "anotherpassword",
                         "Please enter the same password")}
+                ,
+                {new Credentials(
+                        "emailemail.com",
+                        "password",
+                        "password",
+                        "Please enter a valid email address")}
+                ,
+                {new Credentials(
+                        "email@email.com",
+                        "p",
+                        "p",
+                        "Please enter at least 8 characters")}
+                ,
+                {new Credentials(
+                        "email",
+                        "p",
+                        "pas",
+                        "Please enter at least 8 characters")}
         };
     }
 }

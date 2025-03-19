@@ -3,6 +3,7 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -19,6 +20,7 @@ import java.util.Map;
 import screens.BottomNavigation;
 import screens.LoginAndSignUpScreen;
 
+@Slf4j
 @Listeners(MyCustomListener.class)
 public class TestCases {
 
@@ -101,8 +103,24 @@ public class TestCases {
         Assert.assertTrue(loginAndSignUpScreen.isDisplayed(), "Failed to open Login and Signup screen.");
         loginAndSignUpScreen.switchToSignUp();
         Assert.assertTrue(loginAndSignUpScreen.singUpViewIsDisplayed(), "Failed to switch to Sign Up view.");
-        loginAndSignUpScreen.signUpUser(credentials.getEmail(), credentials.getPassword());
+        loginAndSignUpScreen.signUpUser(credentials.getEmail(), credentials.getPassword(), credentials.getPassword());
         Assert.assertEquals(loginAndSignUpScreen.getSuccessMessage(), "Signed Up!", "Sign up failed.");
+    }
+
+    @Test(testName = "Sign up with invalid credentials",
+            groups = {"signup"},
+            dataProvider = "invalid-signup",
+            dataProviderClass = Data.class)
+    public void testSignUpInvalidCredentials(Credentials credentials) {
+        Assert.assertTrue(bottomNavigation.isDisplayed());
+        bottomNavigation.tapLoginIcon();
+        Assert.assertTrue(loginAndSignUpScreen.isDisplayed(), "Failed to open Login and Signup screen.");
+        loginAndSignUpScreen.switchToSignUp();
+        Assert.assertTrue(loginAndSignUpScreen.singUpViewIsDisplayed(), "Failed to switch to Sign Up view.");
+        loginAndSignUpScreen.signUpUser(credentials.getEmail(), credentials.getPassword(), credentials.getRepeatPassword());
+        Assert.assertTrue(loginAndSignUpScreen.getFailureMessages().contains(credentials.getMessage()), "Error message not displayed.");
+        System.out.println(loginAndSignUpScreen.getFailureMessages());
+
     }
 
     @AfterMethod(alwaysRun = true)
