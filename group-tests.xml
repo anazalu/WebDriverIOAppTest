@@ -8,7 +8,8 @@
 <!--                <include name="smoke"/>-->
 <!--                <include name="login"/>-->
 <!--                <include name="signup"/>-->
-                <include name="form"/>
+<!--                <include name="form"/>-->
+                <include name="dropdown"/>
             </run>
         </groups>
         <classes>

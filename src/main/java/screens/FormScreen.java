@@ -1,8 +1,10 @@
 package screens;
 
+import io.appium.java_client.AppiumBy;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
@@ -51,5 +53,16 @@ public class FormScreen {
 
     public String retrieveText() {
         return wait.until(ExpectedConditions.visibilityOf(textOutputField)).getText();
+    }
+
+    public void tapOnDropdown() {
+        dropDown.click();
+    }
+
+    public void optionsDisplayed() {
+        WebElement option = new WebDriverWait(driver, Duration.ofSeconds(3)).until(ExpectedConditions
+                .visibilityOfElementLocated(By
+                        .xpath("//android.widget.CheckedTextView[@resource-id=\"android:id/text1\" and @text=\"webdriver.io is awesome\"]")));
+//        WebElement element = new WebDriverWait(driver, GlobalVariables.globalTimeout).until(ExpectedConditions.visibilityOfElementLocated(AppiumBy.accessibilityId(eventDate)));
     }
 }

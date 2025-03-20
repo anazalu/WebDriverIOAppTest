@@ -150,6 +150,17 @@ public class TestCases {
         Assert.assertNotEquals(outputText, inputText, "Input failed to exceed allowed size.");
     }
 
+    @Test(testName = "Form screen, dropdown",
+            groups = {"form", "dropdown"})
+    public void testFormDropdown() {
+        Assert.assertTrue(bottomNavigation.isDisplayed());
+        bottomNavigation.tapFormsIcon();
+        Assert.assertTrue(formScreen.isDisplayed());
+        formScreen.tapOnDropdown();
+        formScreen.optionsDisplayed();
+
+    }
+
     @AfterMethod(alwaysRun = true)
     public void afterMethodCleanup() {
         driver.executeScript("mobile: terminateApp", Map.ofEntries(
