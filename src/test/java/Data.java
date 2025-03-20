@@ -13,7 +13,9 @@ public class Data {
     @DataProvider(name = "invalid-login")
     public static Object[][] getInValidCredentials () {
         return new Object[][]{
-                {new Credentials("email", "password", "Please enter a valid email address")},
+                {new Credentials("notanemail", "password", "Please enter a valid email address")},
+                {new Credentials("emailexample.com", "password", "Please enter a valid email address")},
+                {new Credentials("email@examplecom", "password", "Please enter a valid email address")},
                 {new Credentials("email@email.com", "p", "Please enter at least 8 characters")}
         };
     }
@@ -28,7 +30,7 @@ public class Data {
                         "Please enter the same password")}
                 ,
                 {new Credentials(
-                        "emailemail.com",
+                        "emailexample.com",
                         "password",
                         "password",
                         "Please enter a valid email address")}
@@ -40,7 +42,7 @@ public class Data {
                         "Please enter at least 8 characters")}
                 ,
                 {new Credentials(
-                        "email",
+                        "notanemail",
                         "p",
                         "pas",
                         "Please enter at least 8 characters")}

@@ -19,6 +19,7 @@ import java.util.Map;
 
 import screens.BottomNavigation;
 import screens.LoginAndSignUpScreen;
+import screens.FormScreen;
 
 @Slf4j
 @Listeners(MyCustomListener.class)
@@ -30,6 +31,7 @@ public class TestCases {
 
     public BottomNavigation bottomNavigation;
     public LoginAndSignUpScreen loginAndSignUpScreen;
+    public FormScreen formScreen;
 
     @BeforeClass(alwaysRun = true)
     public void beforeClassSetup() {
@@ -51,6 +53,7 @@ public class TestCases {
 
         bottomNavigation = new BottomNavigation(driver);
         loginAndSignUpScreen = new LoginAndSignUpScreen(driver);
+        formScreen = new FormScreen(driver);
 
     }
 
@@ -121,6 +124,30 @@ public class TestCases {
         Assert.assertTrue(loginAndSignUpScreen.getFailureMessages().contains(credentials.getMessage()), "Error message not displayed.");
         System.out.println(loginAndSignUpScreen.getFailureMessages());
 
+    }
+
+    @Test(testName = "Form screen, valid text input",
+            groups = {"form", "smoke"})
+    public void testFormValidInput() {
+        String inputText = "Sample input content";
+        Assert.assertTrue(bottomNavigation.isDisplayed());
+        bottomNavigation.tapFormsIcon();
+        Assert.assertTrue(formScreen.isDisplayed());
+        formScreen.insertText(inputText);
+        String outputText = formScreen.retrieveText();
+        Assert.assertEquals(outputText, inputText, "Text mismatch.");
+    }
+
+    @Test(testName = "Form screen, oversize text input",
+            groups = {"form"})
+    public void testFormInputExceedsAllowedSize() {
+        String inputText = "Oversize input content ............................................";
+        Assert.assertTrue(bottomNavigation.isDisplayed());
+        bottomNavigation.tapFormsIcon();
+        Assert.assertTrue(formScreen.isDisplayed());
+        formScreen.insertText(inputText);
+        String outputText = formScreen.retrieveText();
+        Assert.assertNotEquals(outputText, inputText, "Input failed to exceed allowed size.");
     }
 
     @AfterMethod(alwaysRun = true)
