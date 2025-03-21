@@ -4,6 +4,7 @@ import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.A;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -122,12 +123,9 @@ public class TestCases {
         Assert.assertTrue(loginAndSignUpScreen.singUpViewIsDisplayed(), "Failed to switch to Sign Up view.");
         loginAndSignUpScreen.signUpUser(credentials.getEmail(), credentials.getPassword(), credentials.getRepeatPassword());
         Assert.assertTrue(loginAndSignUpScreen.getFailureMessages().contains(credentials.getMessage()), "Error message not displayed.");
-        System.out.println(loginAndSignUpScreen.getFailureMessages());
-
     }
 
-    @Test(testName = "Form screen, valid text input",
-            groups = {"form", "smoke"})
+    @Test(testName = "Form screen, valid text input", groups = {"form", "smoke"})
     public void testFormValidInput() {
         String inputText = "Sample input content";
         Assert.assertTrue(bottomNavigation.isDisplayed());
@@ -138,8 +136,7 @@ public class TestCases {
         Assert.assertEquals(outputText, inputText, "Text mismatch.");
     }
 
-    @Test(testName = "Form screen, oversize text input",
-            groups = {"form"})
+    @Test(testName = "Form screen, oversize text input", groups = {"form"})
     public void testFormInputExceedsAllowedSize() {
         String inputText = "Oversize input content ............................................";
         Assert.assertTrue(bottomNavigation.isDisplayed());
@@ -150,15 +147,20 @@ public class TestCases {
         Assert.assertNotEquals(outputText, inputText, "Input failed to exceed allowed size.");
     }
 
-    @Test(testName = "Form screen, dropdown",
-            groups = {"form", "dropdown"})
-    public void testFormDropdown() {
+    @Test(testName = "Form screen, dropdown", groups = {"form", "dropdown"},
+            dataProvider = "dropdown-option", dataProviderClass = Data.class)
+    public void testFormDropdown(String defaultOption, String option) {
         Assert.assertTrue(bottomNavigation.isDisplayed());
         bottomNavigation.tapFormsIcon();
         Assert.assertTrue(formScreen.isDisplayed());
+        String retrievedOption = formScreen.getSelectedOption();
+        Assert.assertEquals(retrievedOption, defaultOption, "Dropdown options mismatch.");
         formScreen.tapOnDropdown();
-        formScreen.optionsDisplayed();
-
+        Assert.assertTrue(formScreen.optionsDisplayed(option));
+        formScreen.selectOption(option);
+        retrievedOption = formScreen.getSelectedOption();
+//        TODO: checked = true
+        Assert.assertEquals(retrievedOption, option, "Dropdown options mismatch.");
     }
 
     @AfterMethod(alwaysRun = true)

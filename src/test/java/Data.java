@@ -2,17 +2,18 @@ import dataObjects.Credentials;
 import org.testng.annotations.DataProvider;
 
 public class Data {
+    private static String defaultDropdownOption = "Select an item...";
 
     @DataProvider(name = "valid-login-signup")
     public static Object[][] getValidCredentials() {
-        return new Object[][]{
+        return new Object[][] {
                 {new Credentials("email@email.com", "password")}
         };
     }
 
     @DataProvider(name = "invalid-login")
     public static Object[][] getInValidCredentials () {
-        return new Object[][]{
+        return new Object[][] {
                 {new Credentials("notanemail", "password", "Please enter a valid email address")},
                 {new Credentials("emailexample.com", "password", "Please enter a valid email address")},
                 {new Credentials("email@examplecom", "password", "Please enter a valid email address")},
@@ -22,7 +23,7 @@ public class Data {
 
     @DataProvider(name = "invalid-signup")
     public static Object[][] getValidSignUp() {
-        return new Object[][]{
+        return new Object[][] {
                 {new Credentials(
                         "email@email.com",
                         "password",
@@ -46,6 +47,15 @@ public class Data {
                         "p",
                         "pas",
                         "Please enter at least 8 characters")}
+        };
+    }
+
+    @DataProvider(name = "dropdown-option")
+    public static Object[][] getDropdownOptions() {
+        return new Object[][] {
+                {defaultDropdownOption, "webdriver.io is awesome"},
+                {defaultDropdownOption, "Appium is awesome"},
+                {defaultDropdownOption, "This app is awesome"}
         };
     }
 }

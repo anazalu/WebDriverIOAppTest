@@ -31,10 +31,6 @@ public class FormScreen {
 //    @AndroidFindBy(id = "text_input")
     private WebElement dropDown;
 
-//    new UiSelector().text("Select an item...")
-//new UiSelector().text("webdriver.io is awesome")
-//Appium is awesome
-//This app is awesome
 
     public FormScreen(AndroidDriver driver) {
         this.driver = driver;
@@ -56,13 +52,24 @@ public class FormScreen {
     }
 
     public void tapOnDropdown() {
-        dropDown.click();
+        wait.until(ExpectedConditions.visibilityOf(dropDown)).click();
     }
 
-    public void optionsDisplayed() {
-        WebElement option = new WebDriverWait(driver, Duration.ofSeconds(3)).until(ExpectedConditions
+    public boolean optionsDisplayed(String option) {
+        WebElement optionElement = new WebDriverWait(driver, Duration.ofSeconds(3)).until(ExpectedConditions
                 .visibilityOfElementLocated(By
-                        .xpath("//android.widget.CheckedTextView[@resource-id=\"android:id/text1\" and @text=\"webdriver.io is awesome\"]")));
-//        WebElement element = new WebDriverWait(driver, GlobalVariables.globalTimeout).until(ExpectedConditions.visibilityOfElementLocated(AppiumBy.accessibilityId(eventDate)));
+                        .xpath("//android.widget.CheckedTextView[@resource-id=\"android:id/text1\" and @text=\"" + option + "\"]")));
+        return optionElement.isDisplayed();
     }
+
+    public void selectOption(String option) {
+        WebElement optionElem = new WebDriverWait(driver, Duration.ofSeconds(3)).until(ExpectedConditions
+                .visibilityOfElementLocated(By.xpath("//android.widget.CheckedTextView[@resource-id=\"android:id/text1\" and @text=\"" + option + "\"]")));
+        optionElem.click();
+    }
+
+    public String getSelectedOption() {
+        return wait.until(ExpectedConditions.visibilityOf(dropDown)).getText();
+    }
+
 }
