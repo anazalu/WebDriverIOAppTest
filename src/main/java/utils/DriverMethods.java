@@ -41,7 +41,7 @@ public class DriverMethods {
                 Map.entry("elementId", ((RemoteWebElement) element).getId())));
     }
 
-    public static void swipeByCoord(int top, int left, int width, int height,
+    public static void swipeByCoord(int left, int top, int width, int height,
                                     String direction, Double percent, int speed) {
         driver.executeScript("mobile: swipeGesture", Map.ofEntries(
                 Map.entry("left", left),
