@@ -2,10 +2,11 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="All Test Suite">
     <test verbose="2" preserve-order="false" name="/Users/anastasijazalunina/Documents/Projects/zalunina_mob_automation_25_03">
+        <parameter name="inputText" value="Oversize input content ............................................"/>
         <classes>
             <class name="TestCases"/>
             <methods>
-                <exclude name="testFormInputExceedsAllowedSize"/>
+                <include name="testFormInputExceedsAllowedSize"/>
             </methods>
         </classes>
     </test>

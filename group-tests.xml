@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="All Test Suite">
+<suite name="Group Test Suite">
     <test verbose="2" preserve-order="true" name="/Users/anastasijazalunina/Documents/Projects/zalunina_mob_automation_25_03">
-<!--        <parameter name="username" value="standard_user"/>-->
         <groups>
             <run>
 <!--                <include name="smoke"/>-->
 <!--                <include name="login"/>-->
 <!--                <include name="signup"/>-->
 <!--                <include name="form"/>-->
-                <include name="dropdown"/>
+<!--                <include name="dropdown"/>-->
+                <include name="swipe"/>
             </run>
         </groups>
         <classes>

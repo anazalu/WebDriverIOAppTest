@@ -14,7 +14,7 @@ public class ExtentManager {
 
     public static ExtentReports createExtentReports() {
         ExtentSparkReporter reporter = new ExtentSparkReporter(reportPath);
-        reporter.config().setReportName("Extent Report");
+        reporter.config().setReportName("Extent Report - WebDriverIO app");
         extentReports.attachReporter(reporter);
         extentReports.setSystemInfo("OS", String.format("%s %s", System.getProperty("os.name"), System.getProperty("os.version")));
         extentReports.setSystemInfo("Author", "Zalunina");

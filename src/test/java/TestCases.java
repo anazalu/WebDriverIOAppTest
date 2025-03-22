@@ -3,8 +3,6 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
-import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.units.qual.A;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -21,8 +19,10 @@ import java.util.Map;
 import screens.BottomNavigation;
 import screens.LoginAndSignUpScreen;
 import screens.FormScreen;
+import screens.SwipeScreen;
 
-@Slf4j
+import static reports.ExtentTestManager.getTest;
+
 @Listeners(MyCustomListener.class)
 public class TestCases {
 
@@ -33,6 +33,10 @@ public class TestCases {
     public BottomNavigation bottomNavigation;
     public LoginAndSignUpScreen loginAndSignUpScreen;
     public FormScreen formScreen;
+    public SwipeScreen swipeScreen;
+
+    private int screenWidth;
+    private int screenHeight;
 
     @BeforeClass(alwaysRun = true)
     public void beforeClassSetup() {
@@ -55,6 +59,10 @@ public class TestCases {
         bottomNavigation = new BottomNavigation(driver);
         loginAndSignUpScreen = new LoginAndSignUpScreen(driver);
         formScreen = new FormScreen(driver);
+        swipeScreen = new SwipeScreen(driver);
+
+        screenWidth = driver.manage().window().getSize().getWidth();
+        screenHeight = driver.manage().window().getSize().getHeight();
 
     }
 
@@ -136,18 +144,18 @@ public class TestCases {
         Assert.assertEquals(outputText, inputText, "Text mismatch.");
     }
 
-    @Test(testName = "Form screen, oversize text input", groups = {"form"})
-    public void testFormInputExceedsAllowedSize() {
-        String inputText = "Oversize input content ............................................";
+    @Test(testName = "Form screen, oversize text input")
+    @Parameters("inputText")
+    public void testFormInputExceedsAllowedSize(String inputText) {
         Assert.assertTrue(bottomNavigation.isDisplayed());
         bottomNavigation.tapFormsIcon();
         Assert.assertTrue(formScreen.isDisplayed());
         formScreen.insertText(inputText);
         String outputText = formScreen.retrieveText();
-        Assert.assertNotEquals(outputText, inputText, "Input failed to exceed allowed size.");
+        Assert.assertNotEquals(outputText, inputText, "Input failed to exceed the allowed size.");
     }
 
-    @Test(testName = "Form screen, dropdown", groups = {"form", "dropdown"},
+    @Test(testName = "Form screen, dropdown", groups = {"form", "dropdown", "smoke"},
             dataProvider = "dropdown-option", dataProviderClass = Data.class)
     public void testFormDropdown(String defaultOption, String option) {
         Assert.assertTrue(bottomNavigation.isDisplayed());
@@ -159,8 +167,22 @@ public class TestCases {
         Assert.assertTrue(formScreen.optionsDisplayed(option));
         formScreen.selectOption(option);
         retrievedOption = formScreen.getSelectedOption();
+        getTest().info("Selected dropdown option: " + option);
 //        TODO: checked = true
         Assert.assertEquals(retrievedOption, option, "Dropdown options mismatch.");
+    }
+
+    @Test(testName = "Swipe", groups = {"swipe"})
+    public void testSwipe() {
+        Assert.assertTrue(bottomNavigation.isDisplayed());
+        bottomNavigation.tapSwipeIcon();
+        swipeScreen.isDisplayed();
+        getTest().addScreenCaptureFromBase64String(DriverMethods.getScreenshot()).getModel().getMedia().get(0);
+        System.out.println(screenWidth);
+        System.out.println(screenHeight);
+        DriverMethods.swipeByCoord(screenHeight - screenHeight / 8,  screenWidth - screenWidth / 8,
+                screenWidth, screenHeight, "up", 0.5, 500);
+
     }
 
     @AfterMethod(alwaysRun = true)

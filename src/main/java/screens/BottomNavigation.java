@@ -27,6 +27,9 @@ public class BottomNavigation {
     @AndroidFindBy(uiAutomator = "new UiSelector().description(\"Forms\")", priority = 1)
     private WebElement formsIcon;
 
+    @AndroidFindBy(accessibility = "Swipe")
+    private WebElement swipeIcon;
+
     public BottomNavigation(AndroidDriver driver) {
         this.driver = driver;
         PageFactory.initElements(new AppiumFieldDecorator(this.driver), this);
@@ -43,6 +46,10 @@ public class BottomNavigation {
 
     public void tapFormsIcon() {
         wait.until(ExpectedConditions.visibilityOf(formsIcon)).click();
+    }
+
+    public void tapSwipeIcon() {
+        wait.until(ExpectedConditions.visibilityOf(swipeIcon)).click();
     }
 
 }
