@@ -28,7 +28,7 @@ public class MyCustomListener implements ITestListener {
     @Override
     public void onTestStart(ITestResult result) {
         startTest(result.getName(), result.getTestContext().toString());
-        getTest().info("Test started.");
+        getTest().info("Test started");
     }
 
     @Override
@@ -38,11 +38,11 @@ public class MyCustomListener implements ITestListener {
 
     @Override
     public void onTestSuccess(ITestResult result) {
-        getTest().log(Status.PASS, "Test passed.");
+        getTest().log(Status.PASS, "Test passed");
     }
 
     @Override
     public void onTestSkipped(ITestResult result) {
-        getTest().log(Status.SKIP, "Test skipped.");
+        getTest().log(Status.SKIP, "Test skipped");
     }
 }

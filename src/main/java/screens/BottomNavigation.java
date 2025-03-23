@@ -30,6 +30,9 @@ public class BottomNavigation {
     @AndroidFindBy(accessibility = "Swipe")
     private WebElement swipeIcon;
 
+    @AndroidFindBy(accessibility = "Drag")
+    private WebElement dragIcon;
+
     public BottomNavigation(AndroidDriver driver) {
         this.driver = driver;
         PageFactory.initElements(new AppiumFieldDecorator(this.driver), this);
@@ -50,6 +53,10 @@ public class BottomNavigation {
 
     public void tapSwipeIcon() {
         wait.until(ExpectedConditions.visibilityOf(swipeIcon)).click();
+    }
+
+    public void tapDragIcon() {
+        wait.until(ExpectedConditions.visibilityOf(dragIcon)).click();
     }
 
 }

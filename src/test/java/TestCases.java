@@ -3,6 +3,8 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -20,6 +22,7 @@ import screens.BottomNavigation;
 import screens.LoginAndSignUpScreen;
 import screens.FormScreen;
 import screens.SwipeScreen;
+import screens.DragScreen;
 
 import static reports.ExtentTestManager.getTest;
 
@@ -34,6 +37,7 @@ public class TestCases {
     public LoginAndSignUpScreen loginAndSignUpScreen;
     public FormScreen formScreen;
     public SwipeScreen swipeScreen;
+    public DragScreen dragScreen;
 
     @BeforeClass(alwaysRun = true)
     public void beforeClassSetup() {
@@ -57,6 +61,7 @@ public class TestCases {
         loginAndSignUpScreen = new LoginAndSignUpScreen(driver);
         formScreen = new FormScreen(driver);
         swipeScreen = new SwipeScreen(driver);
+        dragScreen = new DragScreen(driver);
 
     }
 
@@ -79,7 +84,7 @@ public class TestCases {
         Assert.assertTrue(bottomNavigation.isDisplayed());
         bottomNavigation.tapLoginIcon();
         Assert.assertTrue(loginAndSignUpScreen.isDisplayed());
-        getTest().info("Login: " + credentials.getEmail() + " , password: " + credentials.getPassword());
+        getTest().info("Login: " + credentials.getEmail() + ", password: " + credentials.getPassword());
         loginAndSignUpScreen.loginUser(credentials.getEmail(), credentials.getPassword());
         Assert.assertEquals(loginAndSignUpScreen.getSuccessMessage(), "Success", "Login failed.");
     }
@@ -94,8 +99,8 @@ public class TestCases {
         Assert.assertTrue(loginAndSignUpScreen.isDisplayed());
         StringBuilder infoText = new StringBuilder();
         infoText.append("Login: ").append(credentials.getEmail());
-        infoText.append(" , password: ").append(credentials.getPassword());
-        infoText.append(" , error message: ").append(credentials.getMessage());
+        infoText.append(", password: ").append(credentials.getPassword());
+        infoText.append(", error message: ").append(credentials.getMessage());
         getTest().info(infoText.toString());
         loginAndSignUpScreen.loginUser(credentials.getEmail(), credentials.getPassword());
         Assert.assertTrue(loginAndSignUpScreen.getFailureMessages().contains(credentials.getMessage()), "Error message not displayed.");
@@ -111,7 +116,7 @@ public class TestCases {
         Assert.assertTrue(loginAndSignUpScreen.isDisplayed(), "Failed to open Login and Signup screen.");
         loginAndSignUpScreen.switchToSignUp();
         Assert.assertTrue(loginAndSignUpScreen.singUpViewIsDisplayed(), "Failed to switch to Sign Up view.");
-        getTest().info("Login: " + credentials.getEmail() + " , password: " + credentials.getPassword());
+        getTest().info("Login: " + credentials.getEmail() + ", password: " + credentials.getPassword());
         loginAndSignUpScreen.signUpUser(credentials.getEmail(), credentials.getPassword(), credentials.getPassword());
         Assert.assertEquals(loginAndSignUpScreen.getSuccessMessage(), "Signed Up!", "Sign up failed.");
     }
@@ -128,9 +133,9 @@ public class TestCases {
         Assert.assertTrue(loginAndSignUpScreen.singUpViewIsDisplayed(), "Failed to switch to Sign Up view.");
         StringBuilder infoText = new StringBuilder();
         infoText.append("Login: ").append(credentials.getEmail());
-        infoText.append(" , password: ").append(credentials.getPassword());
-        infoText.append(" , repeat password: ").append(credentials.getRepeatPassword());
-        infoText.append(" , error message: ").append(credentials.getMessage());
+        infoText.append(", password: ").append(credentials.getPassword());
+        infoText.append(", repeat password: ").append(credentials.getRepeatPassword());
+        infoText.append(", error message: ").append(credentials.getMessage());
         getTest().info(infoText.toString());
         loginAndSignUpScreen.signUpUser(credentials.getEmail(), credentials.getPassword(), credentials.getRepeatPassword());
         Assert.assertTrue(loginAndSignUpScreen.getFailureMessages().contains(credentials.getMessage()), "Error message not displayed.");
@@ -192,8 +197,16 @@ public class TestCases {
         }
         Assert.assertEquals(actualTitles, Data.expectedTitles, "Card titles mismatch.");
 //        getTest().addScreenCaptureFromBase64String(DriverMethods.getScreenshot()).getModel().getMedia().get(0);
-
     }
+
+    @Test(testName = "Drag and drop", groups = {"drag", "smoke"})
+    public void testDragAndDrop() {
+        Assert.assertTrue(bottomNavigation.isDisplayed());
+        bottomNavigation.tapDragIcon();
+        Assert.assertTrue(dragScreen.isDisplayed());
+        dragScreen.dragAndDropAllPieces();
+    }
+
 
     @AfterMethod(alwaysRun = true)
     public void afterMethodCleanup() {

@@ -9,7 +9,8 @@
 <!--                <include name="signup"/>-->
 <!--                <include name="form"/>-->
 <!--                <include name="dropdown"/>-->
-                <include name="swipe"/>
+<!--                <include name="swipe"/>-->
+                <include name="drag"/>
             </run>
         </groups>
         <classes>

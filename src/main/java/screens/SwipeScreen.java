@@ -44,7 +44,7 @@ public class SwipeScreen {
                 screenHeight / 2 + screenHeight / 4,
                 screenWidth / 2 + screenWidth / 4,
                 screenHeight / 10,
-                "left", 0.75, 500);
+                "left", 0.75, 1000);
         return wait.until(ExpectedConditions.visibilityOf(cardTitle)).getText();
     }
 

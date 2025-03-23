@@ -4,13 +4,14 @@
     <inspection_tool class="groupsTestNG" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="groups">
         <value>
-          <list size="6">
-            <item index="0" class="java.lang.String" itemvalue="loginTest" />
-            <item index="1" class="java.lang.String" itemvalue="smoke" />
-            <item index="2" class="java.lang.String" itemvalue="login" />
+          <list size="7">
+            <item index="0" class="java.lang.String" itemvalue="swipe" />
+            <item index="1" class="java.lang.String" itemvalue="login" />
+            <item index="2" class="java.lang.String" itemvalue="smoke" />
             <item index="3" class="java.lang.String" itemvalue="signup" />
             <item index="4" class="java.lang.String" itemvalue="form" />
             <item index="5" class="java.lang.String" itemvalue="dropdown" />
+            <item index="6" class="java.lang.String" itemvalue="drag" />
           </list>
         </value>
       </option>
