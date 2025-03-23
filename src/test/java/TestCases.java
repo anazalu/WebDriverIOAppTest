@@ -3,8 +3,6 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -205,8 +203,10 @@ public class TestCases {
         bottomNavigation.tapDragIcon();
         Assert.assertTrue(dragScreen.isDisplayed());
         dragScreen.dragAndDropAllPieces();
+        getTest().info("Puzzle solved");
+        Assert.assertTrue(dragScreen.congratulationsTextIsDisplayed());
+        Assert.assertTrue(dragScreen.retryButtonIsDisplayed());
     }
-
 
     @AfterMethod(alwaysRun = true)
     public void afterMethodCleanup() {

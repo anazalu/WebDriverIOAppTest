@@ -24,6 +24,12 @@ public class DragScreen {
     @AndroidFindBy(xpath = "//android.widget.TextView[@text=\"Drag and Drop\"]", priority = 1)
     private WebElement titleTextView;
 
+    @AndroidFindBy(xpath = "//android.widget.TextView[@text=\"Congratulations\"]")
+    private WebElement congratulationsTextView;
+
+    @AndroidFindBy(accessibility = "button-Retry")
+    private WebElement retryButton;
+
     public DragScreen(AndroidDriver driver) {
         this.driver = driver;
         PageFactory.initElements(new AppiumFieldDecorator(this.driver), this);
@@ -32,6 +38,14 @@ public class DragScreen {
 
     public boolean isDisplayed() {
         return wait.until(ExpectedConditions.visibilityOf(titleTextView)).isDisplayed();
+    }
+
+    public boolean congratulationsTextIsDisplayed() {
+        return wait.until(ExpectedConditions.visibilityOf(congratulationsTextView)).isDisplayed();
+    }
+
+    public boolean retryButtonIsDisplayed() {
+        return wait.until(ExpectedConditions.visibilityOf(retryButton)).isDisplayed();
     }
 
     public void dragAndDropAllPieces() {
@@ -60,9 +74,9 @@ public class DragScreen {
         };
 
         for (int i = 0; i < widths.length; i++) {
-            String ID = elemIds[i];
-            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(AppiumBy.accessibilityId(ID)));
-            DriverMethods.dragElemToCoord(element, widths[i], heights[i], 2000);
+            String id = elemIds[i];
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(AppiumBy.accessibilityId(id)));
+            DriverMethods.dragElemToCoord(element, widths[i], heights[i], 3000);
         }
     }
 }
