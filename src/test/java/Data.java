@@ -2,7 +2,7 @@ import dataObjects.Credentials;
 import org.testng.annotations.DataProvider;
 
 public class Data {
-    private static String defaultDropdownOption = "Select an item...";
+    public static String[] expectedTitles = {"FULLY OPEN SOURCE", "GREAT COMMUNITY", "JS.FOUNDATION", "SUPPORT VIDEOS", "EXTENDABLE", "COMPATIBLE"};
 
     @DataProvider(name = "valid-login-signup")
     public static Object[][] getValidCredentials() {
@@ -52,6 +52,7 @@ public class Data {
 
     @DataProvider(name = "dropdown-option")
     public static Object[][] getDropdownOptions() {
+        String defaultDropdownOption = "Select an item...";
         return new Object[][] {
                 {defaultDropdownOption, "webdriver.io is awesome"},
                 {defaultDropdownOption, "Appium is awesome"},

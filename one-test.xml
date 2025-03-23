@@ -5,7 +5,7 @@
         <classes>
             <class name="TestCases"/>
             <methods>
-                <include name="testFormValidInput"/>
+                <include name="testDragAndDrop"/>
             </methods>
         </classes>
     </test>

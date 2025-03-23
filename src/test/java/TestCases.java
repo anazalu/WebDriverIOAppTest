@@ -3,6 +3,8 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -20,6 +22,7 @@ import screens.BottomNavigation;
 import screens.LoginAndSignUpScreen;
 import screens.FormScreen;
 import screens.SwipeScreen;
+import screens.DragScreen;
 
 import static reports.ExtentTestManager.getTest;
 
@@ -34,9 +37,7 @@ public class TestCases {
     public LoginAndSignUpScreen loginAndSignUpScreen;
     public FormScreen formScreen;
     public SwipeScreen swipeScreen;
-
-    private int screenWidth;
-    private int screenHeight;
+    public DragScreen dragScreen;
 
     @BeforeClass(alwaysRun = true)
     public void beforeClassSetup() {
@@ -60,9 +61,7 @@ public class TestCases {
         loginAndSignUpScreen = new LoginAndSignUpScreen(driver);
         formScreen = new FormScreen(driver);
         swipeScreen = new SwipeScreen(driver);
-
-        screenWidth = driver.manage().window().getSize().getWidth();
-        screenHeight = driver.manage().window().getSize().getHeight();
+        dragScreen = new DragScreen(driver);
 
     }
 
@@ -73,9 +72,7 @@ public class TestCases {
 
     @Test(testName = "Get device info")
     public void testGetDeviceInfo() {
-        System.out.println(DriverMethods.getDeviceInfo());
-        DriverMethods.logScreenShot();
-        DriverMethods.getScreenshot();
+        getTest().info(DriverMethods.getDeviceInfo());
     }
 
     @Test(testName = "Login with valid credentials",
@@ -84,10 +81,10 @@ public class TestCases {
         dataProvider = "valid-login-signup",
         dataProviderClass = Data.class)
     public void testLoginValidCredentials(Credentials credentials) {
-//        getTest().info("User logs in");
         Assert.assertTrue(bottomNavigation.isDisplayed());
         bottomNavigation.tapLoginIcon();
         Assert.assertTrue(loginAndSignUpScreen.isDisplayed());
+        getTest().info("Login: " + credentials.getEmail() + ", password: " + credentials.getPassword());
         loginAndSignUpScreen.loginUser(credentials.getEmail(), credentials.getPassword());
         Assert.assertEquals(loginAndSignUpScreen.getSuccessMessage(), "Success", "Login failed.");
     }
@@ -100,9 +97,13 @@ public class TestCases {
         Assert.assertTrue(bottomNavigation.isDisplayed());
         bottomNavigation.tapLoginIcon();
         Assert.assertTrue(loginAndSignUpScreen.isDisplayed());
+        StringBuilder infoText = new StringBuilder();
+        infoText.append("Login: ").append(credentials.getEmail());
+        infoText.append(", password: ").append(credentials.getPassword());
+        infoText.append(", error message: ").append(credentials.getMessage());
+        getTest().info(infoText.toString());
         loginAndSignUpScreen.loginUser(credentials.getEmail(), credentials.getPassword());
         Assert.assertTrue(loginAndSignUpScreen.getFailureMessages().contains(credentials.getMessage()), "Error message not displayed.");
-
     }
 
     @Test(testName = "Sign up with valid credentials",
@@ -115,6 +116,7 @@ public class TestCases {
         Assert.assertTrue(loginAndSignUpScreen.isDisplayed(), "Failed to open Login and Signup screen.");
         loginAndSignUpScreen.switchToSignUp();
         Assert.assertTrue(loginAndSignUpScreen.singUpViewIsDisplayed(), "Failed to switch to Sign Up view.");
+        getTest().info("Login: " + credentials.getEmail() + ", password: " + credentials.getPassword());
         loginAndSignUpScreen.signUpUser(credentials.getEmail(), credentials.getPassword(), credentials.getPassword());
         Assert.assertEquals(loginAndSignUpScreen.getSuccessMessage(), "Signed Up!", "Sign up failed.");
     }
@@ -129,6 +131,12 @@ public class TestCases {
         Assert.assertTrue(loginAndSignUpScreen.isDisplayed(), "Failed to open Login and Signup screen.");
         loginAndSignUpScreen.switchToSignUp();
         Assert.assertTrue(loginAndSignUpScreen.singUpViewIsDisplayed(), "Failed to switch to Sign Up view.");
+        StringBuilder infoText = new StringBuilder();
+        infoText.append("Login: ").append(credentials.getEmail());
+        infoText.append(", password: ").append(credentials.getPassword());
+        infoText.append(", repeat password: ").append(credentials.getRepeatPassword());
+        infoText.append(", error message: ").append(credentials.getMessage());
+        getTest().info(infoText.toString());
         loginAndSignUpScreen.signUpUser(credentials.getEmail(), credentials.getPassword(), credentials.getRepeatPassword());
         Assert.assertTrue(loginAndSignUpScreen.getFailureMessages().contains(credentials.getMessage()), "Error message not displayed.");
     }
@@ -136,6 +144,7 @@ public class TestCases {
     @Test(testName = "Form screen, valid text input", groups = {"form", "smoke"})
     public void testFormValidInput() {
         String inputText = "Sample input content";
+        getTest().info("Input text: " + inputText);
         Assert.assertTrue(bottomNavigation.isDisplayed());
         bottomNavigation.tapFormsIcon();
         Assert.assertTrue(formScreen.isDisplayed());
@@ -147,6 +156,7 @@ public class TestCases {
     @Test(testName = "Form screen, oversize text input")
     @Parameters("inputText")
     public void testFormInputExceedsAllowedSize(String inputText) {
+        getTest().info("Input text: " + inputText);
         Assert.assertTrue(bottomNavigation.isDisplayed());
         bottomNavigation.tapFormsIcon();
         Assert.assertTrue(formScreen.isDisplayed());
@@ -176,14 +186,27 @@ public class TestCases {
     public void testSwipe() {
         Assert.assertTrue(bottomNavigation.isDisplayed());
         bottomNavigation.tapSwipeIcon();
-        swipeScreen.isDisplayed();
-        getTest().addScreenCaptureFromBase64String(DriverMethods.getScreenshot()).getModel().getMedia().get(0);
-        System.out.println(screenWidth);
-        System.out.println(screenHeight);
-        DriverMethods.swipeByCoord(screenHeight - screenHeight / 8,  screenWidth - screenWidth / 8,
-                screenWidth, screenHeight, "up", 0.5, 500);
-
+        Assert.assertTrue(swipeScreen.isDisplayed(), "Swipe Screen failed to be displayed.");
+        int carouselLength = Data.expectedTitles.length;
+        String[] actualTitles = new String[carouselLength];
+        actualTitles[0] = swipeScreen.getFirstCardTitle();
+        getTest().info("First card title: " + actualTitles[0]);
+        for (int i = 1; i < carouselLength; i++) {
+            actualTitles[i] = swipeScreen.swipeToNextAndGetText();
+            getTest().info("Next card title: " + actualTitles[i]);
+        }
+        Assert.assertEquals(actualTitles, Data.expectedTitles, "Card titles mismatch.");
+//        getTest().addScreenCaptureFromBase64String(DriverMethods.getScreenshot()).getModel().getMedia().get(0);
     }
+
+    @Test(testName = "Drag and drop", groups = {"drag", "smoke"})
+    public void testDragAndDrop() {
+        Assert.assertTrue(bottomNavigation.isDisplayed());
+        bottomNavigation.tapDragIcon();
+        Assert.assertTrue(dragScreen.isDisplayed());
+        dragScreen.dragAndDropAllPieces();
+    }
+
 
     @AfterMethod(alwaysRun = true)
     public void afterMethodCleanup() {
