@@ -1,4 +1,5 @@
 import dataObjects.Credentials;
+
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
@@ -160,6 +161,7 @@ public class TestCases {
         Assert.assertTrue(formScreen.isDisplayed());
         formScreen.insertText(inputText);
         String outputText = formScreen.retrieveText();
+        getTest().info("Output text: " + outputText);
         Assert.assertNotEquals(outputText, inputText, "Input failed to exceed the allowed size.");
     }
 
@@ -180,7 +182,7 @@ public class TestCases {
         Assert.assertEquals(retrievedOption, option, "Dropdown options mismatch.");
     }
 
-    @Test(testName = "Swipe", groups = {"swipe"})
+    @Test(testName = "Swipe", groups = {"swipe", "smoke"})
     public void testSwipe() {
         Assert.assertTrue(bottomNavigation.isDisplayed());
         bottomNavigation.tapSwipeIcon();
@@ -194,7 +196,7 @@ public class TestCases {
             getTest().info("Next card title: " + actualTitles[i]);
         }
         Assert.assertEquals(actualTitles, Data.expectedTitles, "Card titles mismatch.");
-//        getTest().addScreenCaptureFromBase64String(DriverMethods.getScreenshot()).getModel().getMedia().get(0);
+        getTest().addScreenCaptureFromBase64String(DriverMethods.getScreenshot()).getModel().getMedia().get(0);
     }
 
     @Test(testName = "Drag and drop", groups = {"drag", "smoke"})
@@ -203,16 +205,15 @@ public class TestCases {
         bottomNavigation.tapDragIcon();
         Assert.assertTrue(dragScreen.isDisplayed());
         dragScreen.dragAndDropAllPieces();
-        getTest().info("Puzzle solved");
         Assert.assertTrue(dragScreen.congratulationsTextIsDisplayed());
         Assert.assertTrue(dragScreen.retryButtonIsDisplayed());
+        getTest().info("Puzzle solved");
     }
 
     @AfterMethod(alwaysRun = true)
     public void afterMethodCleanup() {
         driver.executeScript("mobile: terminateApp", Map.ofEntries(
                 Map.entry("appId", "com.wdiodemoapp"),
-//                Map.entry("appId", TestProperties.getProperty("appPackage")),
                 Map.entry("timeout", 1000)
         ));
     }

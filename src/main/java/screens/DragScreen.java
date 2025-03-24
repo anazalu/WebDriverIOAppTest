@@ -6,7 +6,6 @@ import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.HowToUseLocators;
 import io.appium.java_client.pagefactory.LocatorGroupStrategy;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -72,7 +71,6 @@ public class DragScreen {
                 "drag-c1", "drag-c2", "drag-c3",
                 "drag-r1", "drag-r2", "drag-r3"
         };
-
         for (int i = 0; i < widths.length; i++) {
             String id = elemIds[i];
             WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(AppiumBy.accessibilityId(id)));

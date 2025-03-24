@@ -21,7 +21,7 @@ mvn clean test -Dsurefire.suiteXmlFiles=parameter-test.xml
 ```
 ## Test reports
 ### To see the reports, open the .html file in /extent-reports
-#### Test run results
+#### Test run results:
 ![img.png](img.png)
-#### Failed test report
+#### Example of a failed test:
 ![img_1.png](img_1.png)
