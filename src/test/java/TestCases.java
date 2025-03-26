@@ -61,7 +61,6 @@ public class TestCases {
         formScreen = new FormScreen(driver);
         swipeScreen = new SwipeScreen(driver);
         dragScreen = new DragScreen(driver);
-
     }
 
     @BeforeMethod(alwaysRun = true)
@@ -172,13 +171,18 @@ public class TestCases {
         bottomNavigation.tapFormsIcon();
         Assert.assertTrue(formScreen.isDisplayed());
         String retrievedOption = formScreen.getSelectedOption();
-        Assert.assertEquals(retrievedOption, defaultOption, "Dropdown options mismatch.");
+        Assert.assertEquals(retrievedOption, defaultOption, "Default option mismatch.");
         formScreen.tapOnDropdown();
         Assert.assertTrue(formScreen.optionsDisplayed(option));
         formScreen.selectOption(option);
+
+        formScreen.validateItemAttributeIsChecked(option);
+        getTest().info(formScreen.selectedIsChecked);
+        getTest().info(formScreen.notSelectedIsNotChecked);
+        Assert.assertTrue(formScreen.checkedAttributeSetToTrue, "Attribute (checked) not set to true.");
+
         retrievedOption = formScreen.getSelectedOption();
         getTest().info("Selected dropdown option: " + option);
-//        TODO: checked = true
         Assert.assertEquals(retrievedOption, option, "Dropdown options mismatch.");
     }
 

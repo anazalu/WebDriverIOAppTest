@@ -5,7 +5,7 @@
         <classes>
             <class name="TestCases"/>
             <methods>
-                <include name="testSwipe"/>
+                <include name="testFormDropdown"/>
             </methods>
         </classes>
     </test>

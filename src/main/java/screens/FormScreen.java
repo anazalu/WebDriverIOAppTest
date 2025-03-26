@@ -10,12 +10,17 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import utils.DriverMethods;
 
 import java.time.Duration;
+import java.util.List;
 
 public class FormScreen {
     private AndroidDriver driver;
     private WebDriverWait wait;
+    public boolean checkedAttributeSetToTrue = true;
+    public String selectedIsChecked = "Selected element has attribute \"checked\" set to true";
+    public String notSelectedIsNotChecked = "Not selected element has attribute \"checked\" set to false";
 
     @HowToUseLocators(androidAutomation = LocatorGroupStrategy.ALL_POSSIBLE)
     @AndroidFindBy(xpath = "//android.widget.TextView[@text=\"Form components\"]", priority = 1)
@@ -30,6 +35,9 @@ public class FormScreen {
 
     @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"text_input\")")
     private WebElement dropDown;
+
+    @AndroidFindBy(xpath = "//android.widget.CheckedTextView[@resource-id=\"android:id/text1\"]")
+    private List<WebElement> options;
 
 
     public FormScreen(AndroidDriver driver) {
@@ -66,6 +74,24 @@ public class FormScreen {
         WebElement optionElem = new WebDriverWait(driver, Duration.ofSeconds(3)).until(ExpectedConditions
                 .visibilityOfElementLocated(By.xpath("//android.widget.CheckedTextView[@resource-id=\"android:id/text1\" and @text=\"" + option + "\"]")));
         optionElem.click();
+    }
+
+    public void validateItemAttributeIsChecked(String selectedOption) {
+        wait.until(ExpectedConditions.visibilityOf(dropDown)).click();
+        wait.until(ExpectedConditions.visibilityOf(options.get(0)));
+        for (WebElement option : options) {
+            if (option.getText().equalsIgnoreCase(selectedOption)) {
+                if (option.getDomAttribute("checked").equals("false")) {
+                    checkedAttributeSetToTrue = false;
+                    selectedIsChecked = "Error. Selected element has attribute \"checked\" set to false";
+                } else if (option.getDomAttribute("checked").equalsIgnoreCase("true")) {
+                    checkedAttributeSetToTrue = false;
+                    notSelectedIsNotChecked = "Error. Not selected element has attribute \"checked\" set to true";
+                }
+            }
+
+        }
+        DriverMethods.tapOnCoordinates(driver.manage().window().getSize().getWidth() / 2, driver.manage().window().getSize().getHeight() / 16);
     }
 
     public String getSelectedOption() {
