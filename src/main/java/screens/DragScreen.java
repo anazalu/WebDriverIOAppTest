@@ -6,7 +6,6 @@ import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.HowToUseLocators;
 import io.appium.java_client.pagefactory.LocatorGroupStrategy;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -24,6 +23,12 @@ public class DragScreen {
     @AndroidFindBy(xpath = "//android.widget.TextView[@text=\"Drag and Drop\"]", priority = 1)
     private WebElement titleTextView;
 
+    @AndroidFindBy(xpath = "//android.widget.TextView[@text=\"Congratulations\"]")
+    private WebElement congratulationsTextView;
+
+    @AndroidFindBy(accessibility = "button-Retry")
+    private WebElement retryButton;
+
     public DragScreen(AndroidDriver driver) {
         this.driver = driver;
         PageFactory.initElements(new AppiumFieldDecorator(this.driver), this);
@@ -32,6 +37,14 @@ public class DragScreen {
 
     public boolean isDisplayed() {
         return wait.until(ExpectedConditions.visibilityOf(titleTextView)).isDisplayed();
+    }
+
+    public boolean congratulationsTextIsDisplayed() {
+        return wait.until(ExpectedConditions.visibilityOf(congratulationsTextView)).isDisplayed();
+    }
+
+    public boolean retryButtonIsDisplayed() {
+        return wait.until(ExpectedConditions.visibilityOf(retryButton)).isDisplayed();
     }
 
     public void dragAndDropAllPieces() {
@@ -58,11 +71,10 @@ public class DragScreen {
                 "drag-c1", "drag-c2", "drag-c3",
                 "drag-r1", "drag-r2", "drag-r3"
         };
-
         for (int i = 0; i < widths.length; i++) {
-            String ID = elemIds[i];
-            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(AppiumBy.accessibilityId(ID)));
-            DriverMethods.dragElemToCoord(element, widths[i], heights[i], 2000);
+            String id = elemIds[i];
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(AppiumBy.accessibilityId(id)));
+            DriverMethods.dragElemToCoord(element, widths[i], heights[i], 3000);
         }
     }
 }

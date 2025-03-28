@@ -1,35 +1,44 @@
 package screens;
 
-import io.appium.java_client.AppiumBy;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
+import io.appium.java_client.pagefactory.HowToUseLocators;
+import io.appium.java_client.pagefactory.LocatorGroupStrategy;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import utils.DriverMethods;
 
 import java.time.Duration;
+import java.util.List;
+import java.util.Objects;
 
 public class FormScreen {
     private AndroidDriver driver;
     private WebDriverWait wait;
+    public boolean checkedAttributeSetToTrue = true;
+    public String selectedIsChecked = "Selected element has attribute \"checked\" set to true";
+    public String notSelectedIsNotChecked = "Not selected element has attribute \"checked\" set to false";
 
+    @HowToUseLocators(androidAutomation = LocatorGroupStrategy.ALL_POSSIBLE)
+    @AndroidFindBy(xpath = "//android.widget.TextView[@text=\"Form components\"]", priority = 1)
     @AndroidFindBy(uiAutomator = "new UiSelector().text(\"Form components\")")
     private WebElement formTextView;
 
     @AndroidFindBy(accessibility = "text-input")
-//    @AndroidFindBy(id = "RNE__Input__text-input")
     private WebElement textInputField;
 
     @AndroidFindBy(accessibility = "input-text-result")
     private WebElement textOutputField;
 
     @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"text_input\")")
-//    @AndroidFindBy(id = "text_input")
     private WebElement dropDown;
+
+    @AndroidFindBy(xpath = "//android.widget.CheckedTextView[@resource-id=\"android:id/text1\"]")
+    private List<WebElement> options;
 
 
     public FormScreen(AndroidDriver driver) {
@@ -68,8 +77,25 @@ public class FormScreen {
         optionElem.click();
     }
 
+    public void validateItemAttributeIsChecked(String selectedOption) {
+        wait.until(ExpectedConditions.visibilityOf(dropDown)).click();
+        wait.until(ExpectedConditions.visibilityOf(options.get(0)));
+        for (WebElement option : options) {
+            if (option.getText().equalsIgnoreCase(selectedOption)) {
+                if (Objects.equals(option.getDomAttribute("checked"), "false")) {
+                    checkedAttributeSetToTrue = false;
+                    selectedIsChecked = "Error. Selected element " + option.getText() + " has attribute \"checked\" set to false";
+                }
+            } else if (Objects.equals(option.getDomAttribute("checked"), "true")) {
+                checkedAttributeSetToTrue = false;
+                notSelectedIsNotChecked = "Error. Not selected element  " + option.getText() +" has attribute \"checked\" set to true";
+            }
+
+        }
+        DriverMethods.tapOnCoordinates(driver.manage().window().getSize().getWidth() / 2, driver.manage().window().getSize().getHeight() / 16);
+    }
+
     public String getSelectedOption() {
         return wait.until(ExpectedConditions.visibilityOf(dropDown)).getText();
     }
-
 }

@@ -1,10 +1,9 @@
 import dataObjects.Credentials;
+
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -62,7 +61,6 @@ public class TestCases {
         formScreen = new FormScreen(driver);
         swipeScreen = new SwipeScreen(driver);
         dragScreen = new DragScreen(driver);
-
     }
 
     @BeforeMethod(alwaysRun = true)
@@ -162,6 +160,7 @@ public class TestCases {
         Assert.assertTrue(formScreen.isDisplayed());
         formScreen.insertText(inputText);
         String outputText = formScreen.retrieveText();
+        getTest().info("Output text: " + outputText);
         Assert.assertNotEquals(outputText, inputText, "Input failed to exceed the allowed size.");
     }
 
@@ -172,17 +171,22 @@ public class TestCases {
         bottomNavigation.tapFormsIcon();
         Assert.assertTrue(formScreen.isDisplayed());
         String retrievedOption = formScreen.getSelectedOption();
-        Assert.assertEquals(retrievedOption, defaultOption, "Dropdown options mismatch.");
+        Assert.assertEquals(retrievedOption, defaultOption, "Default option mismatch.");
         formScreen.tapOnDropdown();
         Assert.assertTrue(formScreen.optionsDisplayed(option));
         formScreen.selectOption(option);
+
+        formScreen.validateItemAttributeIsChecked(option);
+        getTest().info(formScreen.selectedIsChecked);
+        getTest().info(formScreen.notSelectedIsNotChecked);
+        Assert.assertTrue(formScreen.checkedAttributeSetToTrue, "Attribute (checked) not set to true.");
+
         retrievedOption = formScreen.getSelectedOption();
         getTest().info("Selected dropdown option: " + option);
-//        TODO: checked = true
         Assert.assertEquals(retrievedOption, option, "Dropdown options mismatch.");
     }
 
-    @Test(testName = "Swipe", groups = {"swipe"})
+    @Test(testName = "Swipe", groups = {"swipe", "smoke"})
     public void testSwipe() {
         Assert.assertTrue(bottomNavigation.isDisplayed());
         bottomNavigation.tapSwipeIcon();
@@ -196,7 +200,7 @@ public class TestCases {
             getTest().info("Next card title: " + actualTitles[i]);
         }
         Assert.assertEquals(actualTitles, Data.expectedTitles, "Card titles mismatch.");
-//        getTest().addScreenCaptureFromBase64String(DriverMethods.getScreenshot()).getModel().getMedia().get(0);
+        getTest().addScreenCaptureFromBase64String(DriverMethods.getScreenshot()).getModel().getMedia().get(0);
     }
 
     @Test(testName = "Drag and drop", groups = {"drag", "smoke"})
@@ -205,14 +209,15 @@ public class TestCases {
         bottomNavigation.tapDragIcon();
         Assert.assertTrue(dragScreen.isDisplayed());
         dragScreen.dragAndDropAllPieces();
+        Assert.assertTrue(dragScreen.congratulationsTextIsDisplayed());
+        Assert.assertTrue(dragScreen.retryButtonIsDisplayed());
+        getTest().info("Puzzle solved");
     }
-
 
     @AfterMethod(alwaysRun = true)
     public void afterMethodCleanup() {
         driver.executeScript("mobile: terminateApp", Map.ofEntries(
                 Map.entry("appId", "com.wdiodemoapp"),
-//                Map.entry("appId", TestProperties.getProperty("appPackage")),
                 Map.entry("timeout", 1000)
         ));
     }

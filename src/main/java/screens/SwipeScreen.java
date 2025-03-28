@@ -3,10 +3,14 @@ package screens;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
+
+import io.appium.java_client.pagefactory.HowToUseLocators;
+import io.appium.java_client.pagefactory.LocatorGroupStrategy;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 import utils.DriverMethods;
 
 import java.time.Duration;
@@ -18,10 +22,13 @@ public class SwipeScreen {
     @AndroidFindBy(accessibility = "Carousel")
     private WebElement carouselView;
 
+    @HowToUseLocators(androidAutomation = LocatorGroupStrategy.ALL_POSSIBLE)
+    @AndroidFindBy(uiAutomator = "new UiSelector().text(\"Swipe horizontal\")")
+    @AndroidFindBy(xpath = "//android.widget.TextView[@text=\"Swipe horizontal\"]", priority = 1)
+    private WebElement screenTitleView;
+
     @AndroidFindBy(xpath = "(//android.view.ViewGroup[@content-desc=\"slideTextContainer\"])[1]//android.widget.TextView[1]")
     private WebElement cardTitle;
-
-//    new UiSelector().text("Swipe horizontal")
 
     public SwipeScreen(AndroidDriver driver) {
         this.driver = driver;
@@ -30,6 +37,7 @@ public class SwipeScreen {
     }
 
     public boolean isDisplayed() {
+       wait.until(ExpectedConditions.visibilityOf(screenTitleView));
        return wait.until(ExpectedConditions.visibilityOf(carouselView)).isDisplayed();
     }
 

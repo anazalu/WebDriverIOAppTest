@@ -29,9 +29,7 @@ public class LoginAndSignUpScreen {
     @AndroidFindBy(xpath = "//android.widget.EditText[@content-desc=\"input-password\"]")
     private WebElement passwordField;
 
-    @HowToUseLocators(androidAutomation = LocatorGroupStrategy.ALL_POSSIBLE)
     @AndroidFindBy(uiAutomator = "new UiSelector().text(\"LOGIN\")")
-    @AndroidFindBy(xpath = "//android.widget.TextView[@text=\"LOGIN\"]")
     private WebElement loginButton;
 
     @AndroidFindBy(xpath = "//android.widget.TextView[preceding-sibling::android.view.ViewGroup[android.widget.EditText[@content-desc=\"input-email\"]]]")
