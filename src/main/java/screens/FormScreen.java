@@ -14,6 +14,7 @@ import utils.DriverMethods;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Objects;
 
 public class FormScreen {
     private AndroidDriver driver;
@@ -81,13 +82,13 @@ public class FormScreen {
         wait.until(ExpectedConditions.visibilityOf(options.get(0)));
         for (WebElement option : options) {
             if (option.getText().equalsIgnoreCase(selectedOption)) {
-                if (option.getDomAttribute("checked").equals("false")) {
+                if (Objects.equals(option.getDomAttribute("checked"), "false")) {
                     checkedAttributeSetToTrue = false;
-                    selectedIsChecked = "Error. Selected element has attribute \"checked\" set to false";
-                } else if (option.getDomAttribute("checked").equalsIgnoreCase("true")) {
-                    checkedAttributeSetToTrue = false;
-                    notSelectedIsNotChecked = "Error. Not selected element has attribute \"checked\" set to true";
+                    selectedIsChecked = "Error. Selected element " + option.getText() + " has attribute \"checked\" set to false";
                 }
+            } else if (Objects.equals(option.getDomAttribute("checked"), "true")) {
+                checkedAttributeSetToTrue = false;
+                notSelectedIsNotChecked = "Error. Not selected element  " + option.getText() +" has attribute \"checked\" set to true";
             }
 
         }
@@ -97,5 +98,4 @@ public class FormScreen {
     public String getSelectedOption() {
         return wait.until(ExpectedConditions.visibilityOf(dropDown)).getText();
     }
-
 }
