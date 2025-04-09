@@ -68,17 +68,13 @@ public class TestCases {
         DriverMethods.activateApp();
     }
 
-    @Test(testName = "Get device info")
-    public void testGetDeviceInfo() {
-        getTest().info(DriverMethods.getDeviceInfo());
-    }
-
     @Test(testName = "Login with valid credentials",
-        groups = {"smoke", "login"},
+        groups = {"smoke", "login", "TC1"},
         description = "Login test",
         dataProvider = "valid-login-signup",
         dataProviderClass = Data.class)
     public void testLoginValidCredentials(Credentials credentials) {
+        getTest().info(DriverMethods.getDeviceInfo());
         Assert.assertTrue(bottomNavigation.isDisplayed());
         bottomNavigation.tapLoginIcon();
         Assert.assertTrue(loginAndSignUpScreen.isDisplayed());
@@ -88,10 +84,11 @@ public class TestCases {
     }
 
     @Test(testName = "Login with invalid credentials",
-        groups = {"login"},
+        groups = {"login", "TC1"},
         dataProvider = "invalid-login",
         dataProviderClass = Data.class)
     public void testLoginInvalidCredentials(Credentials credentials) {
+        getTest().info(DriverMethods.getDeviceInfo());
         Assert.assertTrue(bottomNavigation.isDisplayed());
         bottomNavigation.tapLoginIcon();
         Assert.assertTrue(loginAndSignUpScreen.isDisplayed());
@@ -105,10 +102,11 @@ public class TestCases {
     }
 
     @Test(testName = "Sign up with valid credentials",
-            groups = {"smoke", "signup"},
+            groups = {"smoke", "signup", "TC1"},
             dataProvider = "valid-login-signup",
             dataProviderClass = Data.class)
     public void testSignUpValidCredentials(Credentials credentials) {
+        getTest().info(DriverMethods.getDeviceInfo());
         Assert.assertTrue(bottomNavigation.isDisplayed());
         bottomNavigation.tapLoginIcon();
         Assert.assertTrue(loginAndSignUpScreen.isDisplayed(), "Failed to open Login and Signup screen.");
@@ -120,10 +118,11 @@ public class TestCases {
     }
 
     @Test(testName = "Sign up with invalid credentials",
-            groups = {"signup"},
+            groups = {"signup", "TC1"},
             dataProvider = "invalid-signup",
             dataProviderClass = Data.class)
     public void testSignUpInvalidCredentials(Credentials credentials) {
+        getTest().info(DriverMethods.getDeviceInfo());
         Assert.assertTrue(bottomNavigation.isDisplayed());
         bottomNavigation.tapLoginIcon();
         Assert.assertTrue(loginAndSignUpScreen.isDisplayed(), "Failed to open Login and Signup screen.");
@@ -139,8 +138,9 @@ public class TestCases {
         Assert.assertTrue(loginAndSignUpScreen.getFailureMessages().contains(credentials.getMessage()), "Error message not displayed.");
     }
 
-    @Test(testName = "Form screen, valid text input", groups = {"form", "smoke"})
+    @Test(testName = "Form screen, valid text input", groups = {"TC2", "form", "smoke"})
     public void testFormValidInput() {
+        getTest().info(DriverMethods.getDeviceInfo());
         String inputText = "Sample input content";
         getTest().info("Input text: " + inputText);
         Assert.assertTrue(bottomNavigation.isDisplayed());
@@ -151,9 +151,10 @@ public class TestCases {
         Assert.assertEquals(outputText, inputText, "Text mismatch.");
     }
 
-    @Test(testName = "Form screen, oversize text input")
+    @Test(testName = "Form screen, oversize text input", groups = {"TC2", "form"})
     @Parameters("inputText")
     public void testFormInputExceedsAllowedSize(String inputText) {
+        getTest().info(DriverMethods.getDeviceInfo());
         getTest().info("Input text: " + inputText);
         Assert.assertTrue(bottomNavigation.isDisplayed());
         bottomNavigation.tapFormsIcon();
@@ -164,9 +165,10 @@ public class TestCases {
         Assert.assertNotEquals(outputText, inputText, "Input failed to exceed the allowed size.");
     }
 
-    @Test(testName = "Form screen, dropdown", groups = {"form", "dropdown", "smoke"},
+    @Test(testName = "Form screen, dropdown", groups = {"form", "dropdown", "smoke", "TC2"},
             dataProvider = "dropdown-option", dataProviderClass = Data.class)
     public void testFormDropdown(String defaultOption, String option) {
+        getTest().info(DriverMethods.getDeviceInfo());
         Assert.assertTrue(bottomNavigation.isDisplayed());
         bottomNavigation.tapFormsIcon();
         Assert.assertTrue(formScreen.isDisplayed());
@@ -186,8 +188,9 @@ public class TestCases {
         Assert.assertEquals(retrievedOption, option, "Dropdown options mismatch.");
     }
 
-    @Test(testName = "Swipe", groups = {"swipe", "smoke"})
+    @Test(testName = "Swipe", groups = {"swipe", "smoke", "TC3"})
     public void testSwipe() {
+        getTest().info(DriverMethods.getDeviceInfo());
         Assert.assertTrue(bottomNavigation.isDisplayed());
         bottomNavigation.tapSwipeIcon();
         Assert.assertTrue(swipeScreen.isDisplayed(), "Swipe Screen failed to be displayed.");
@@ -203,8 +206,9 @@ public class TestCases {
         getTest().addScreenCaptureFromBase64String(DriverMethods.getScreenshot()).getModel().getMedia().get(0);
     }
 
-    @Test(testName = "Drag and drop", groups = {"drag", "smoke"})
+    @Test(testName = "Drag and drop", groups = {"drag", "smoke", "TC4"})
     public void testDragAndDrop() {
+        getTest().info(DriverMethods.getDeviceInfo());
         Assert.assertTrue(bottomNavigation.isDisplayed());
         bottomNavigation.tapDragIcon();
         Assert.assertTrue(dragScreen.isDisplayed());
