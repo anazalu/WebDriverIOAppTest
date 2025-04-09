@@ -4,7 +4,7 @@
     <inspection_tool class="groupsTestNG" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="groups">
         <value>
-          <list size="7">
+          <list size="11">
             <item index="0" class="java.lang.String" itemvalue="swipe" />
             <item index="1" class="java.lang.String" itemvalue="login" />
             <item index="2" class="java.lang.String" itemvalue="smoke" />
@@ -12,6 +12,10 @@
             <item index="4" class="java.lang.String" itemvalue="form" />
             <item index="5" class="java.lang.String" itemvalue="dropdown" />
             <item index="6" class="java.lang.String" itemvalue="drag" />
+            <item index="7" class="java.lang.String" itemvalue="TC4" />
+            <item index="8" class="java.lang.String" itemvalue="TC3" />
+            <item index="9" class="java.lang.String" itemvalue="TC2" />
+            <item index="10" class="java.lang.String" itemvalue="TC1" />
           </list>
         </value>
       </option>
