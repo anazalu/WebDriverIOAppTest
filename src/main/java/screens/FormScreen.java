@@ -17,9 +17,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class FormScreen {
-    private AndroidDriver driver;
-    private WebDriverWait wait;
-    public boolean checkedAttributeSetToTrue = true;
+    private final AndroidDriver driver;
+    private final WebDriverWait wait;
     public String selectedIsChecked = "Selected element has attribute \"checked\" set to true";
     public String notSelectedIsNotChecked = "Not selected element has attribute \"checked\" set to false";
 
@@ -34,12 +33,14 @@ public class FormScreen {
     @AndroidFindBy(accessibility = "input-text-result")
     private WebElement textOutputField;
 
+    @HowToUseLocators(androidAutomation = LocatorGroupStrategy.ALL_POSSIBLE)
     @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"text_input\")")
+    @AndroidFindBy(xpath = "//android.widget.EditText[@resource-id=\"text_input\"]", priority = 1)
+    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"icon_container\")", priority = 2)
     private WebElement dropDown;
 
     @AndroidFindBy(xpath = "//android.widget.CheckedTextView[@resource-id=\"android:id/text1\"]")
-    private List<WebElement> options;
-
+    protected List<WebElement> dropDownItems;
 
     public FormScreen(AndroidDriver driver) {
         this.driver = driver;
@@ -64,35 +65,38 @@ public class FormScreen {
         wait.until(ExpectedConditions.visibilityOf(dropDown)).click();
     }
 
-    public boolean optionsDisplayed(String option) {
+    public boolean dropDownOptionsDisplayed(String option) {
         WebElement optionElement = new WebDriverWait(driver, Duration.ofSeconds(3)).until(ExpectedConditions
                 .visibilityOfElementLocated(By
                         .xpath("//android.widget.CheckedTextView[@resource-id=\"android:id/text1\" and @text=\"" + option + "\"]")));
         return optionElement.isDisplayed();
     }
 
-    public void selectOption(String option) {
+    public void selectDropDownOption(String option) {
         WebElement optionElem = new WebDriverWait(driver, Duration.ofSeconds(3)).until(ExpectedConditions
                 .visibilityOfElementLocated(By.xpath("//android.widget.CheckedTextView[@resource-id=\"android:id/text1\" and @text=\"" + option + "\"]")));
         optionElem.click();
     }
 
-    public void validateItemAttributeIsChecked(String selectedOption) {
+    public boolean validateItemAttributeIsChecked(String selectedOption) {
+        boolean checkedAttributeSetToTrue = false;
         wait.until(ExpectedConditions.visibilityOf(dropDown)).click();
-        wait.until(ExpectedConditions.visibilityOf(options.get(0)));
-        for (WebElement option : options) {
-            if (option.getText().equalsIgnoreCase(selectedOption)) {
-                if (Objects.equals(option.getDomAttribute("checked"), "false")) {
-                    checkedAttributeSetToTrue = false;
-                    selectedIsChecked = "Error. Selected element " + option.getText() + " has attribute \"checked\" set to false";
+        wait.until(ExpectedConditions.visibilityOf(dropDownItems.get(0)));
+        for (WebElement dropDownItem : dropDownItems) {
+            if (dropDownItem.getText().equalsIgnoreCase(selectedOption)) {
+                if (Objects.equals(dropDownItem.getDomAttribute("checked"), "true")) {
+                    checkedAttributeSetToTrue = true;
+                } else {
+                    selectedIsChecked = "Error. Selected element " + dropDownItem.getText() + " has attribute \"checked\" set to false";
                 }
-            } else if (Objects.equals(option.getDomAttribute("checked"), "true")) {
-                checkedAttributeSetToTrue = false;
-                notSelectedIsNotChecked = "Error. Not selected element  " + option.getText() +" has attribute \"checked\" set to true";
+            } else {
+                if (Objects.equals(dropDownItem.getDomAttribute("checked"), "true")) {
+                    notSelectedIsNotChecked = "Error. Not selected element  " + dropDownItem.getText() +" has attribute \"checked\" set to true";
+                }
             }
-
         }
         DriverMethods.tapOnCoordinates(driver.manage().window().getSize().getWidth() / 2, driver.manage().window().getSize().getHeight() / 16);
+        return checkedAttributeSetToTrue;
     }
 
     public String getSelectedOption() {
