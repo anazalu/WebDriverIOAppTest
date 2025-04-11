@@ -3,10 +3,11 @@
 <suite name="one Test Suite" verbose="2">
     <test name="/Users/anastasijazalunina/Documents/Projects/zalunina_mob_automation_25_03">
         <classes>
-            <class name="TestCases"/>
-            <methods>
-                <include name="testFormDropdown"/>
-            </methods>
+            <class name="TestCases">
+                <methods>
+                    <include name="testFormDropdown"/>
+                </methods>
+            </class>
         </classes>
     </test>
 </suite>

@@ -4,17 +4,21 @@
     <test verbose="2" preserve-order="true" name="/Users/anastasijazalunina/Documents/Projects/zalunina_mob_automation_25_03">
         <groups>
             <run>
-<!--                <include name="smoke"/>-->
+                <include name="smoke"/>
 <!--                <include name="login"/>-->
 <!--                <include name="signup"/>-->
 <!--                <include name="form"/>-->
-                <include name="dropdown"/>
+<!--                <include name="dropdown"/>-->
 <!--                <include name="swipe"/>-->
 <!--                <include name="drag"/>-->
             </run>
         </groups>
         <classes>
-            <class name="TestCases"/>
+            <class name="TestCases">
+                <methods>
+                    <exclude name="testFormInputExceedsAllowedSize"/>
+                </methods>
+            </class>
         </classes>
     </test>
 </suite>

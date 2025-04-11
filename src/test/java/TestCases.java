@@ -167,25 +167,24 @@ public class TestCases {
 
     @Test(testName = "Form screen, dropdown", groups = {"form", "dropdown", "smoke", "TC2"},
             dataProvider = "dropdown-option", dataProviderClass = Data.class)
-    public void testFormDropdown(String defaultOption, String option) {
+    public void testFormDropdown(String defaultOption, String selectedOption) {
         getTest().info(DriverMethods.getDeviceInfo());
         Assert.assertTrue(bottomNavigation.isDisplayed());
         bottomNavigation.tapFormsIcon();
         Assert.assertTrue(formScreen.isDisplayed());
         String retrievedOption = formScreen.getSelectedOption();
-        Assert.assertEquals(retrievedOption, defaultOption, "Default option mismatch.");
+        Assert.assertEquals(retrievedOption, defaultOption, "Default dropdown item is not displayed.");
         formScreen.tapOnDropdown();
-        Assert.assertTrue(formScreen.optionsDisplayed(option));
-        formScreen.selectOption(option);
+        Assert.assertTrue(formScreen.dropDownOptionsDisplayed(selectedOption));
+        formScreen.selectDropDownOption(selectedOption);
 
-        formScreen.validateItemAttributeIsChecked(option);
+        Assert.assertTrue(formScreen.validateItemAttributeIsChecked(selectedOption), "Error. For a selected dropdown item, attribute \"checked\" is not set to true.");
         getTest().info(formScreen.selectedIsChecked);
         getTest().info(formScreen.notSelectedIsNotChecked);
-        Assert.assertTrue(formScreen.checkedAttributeSetToTrue, "Attribute (checked) not set to true.");
 
         retrievedOption = formScreen.getSelectedOption();
-        getTest().info("Selected dropdown option: " + option);
-        Assert.assertEquals(retrievedOption, option, "Dropdown options mismatch.");
+        getTest().info("Selected dropdown option: " + selectedOption);
+        Assert.assertEquals(retrievedOption, selectedOption, "Selected dropdown item is not displayed.");
     }
 
     @Test(testName = "Swipe", groups = {"swipe", "smoke", "TC3"})

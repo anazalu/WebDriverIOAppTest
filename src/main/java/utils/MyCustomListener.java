@@ -4,9 +4,7 @@ import com.aventstack.extentreports.Status;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
-import org.testng.Reporter;
 import reports.ExtentManager;
-import reports.ExtentTestManager;
 
 import static reports.ExtentTestManager.getTest;
 import static reports.ExtentTestManager.startTest;
@@ -22,7 +20,6 @@ public class MyCustomListener implements ITestListener {
         getTest().log(Status.FAIL,
                 getTest().addScreenCaptureFromBase64String(DriverMethods.getScreenshot()).getModel().getMedia().get(0)
         );
-        DriverMethods.logScreenShot();
     }
 
     @Override
