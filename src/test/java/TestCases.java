@@ -15,7 +15,6 @@ import utils.TestProperties;
 
 import java.io.File;
 import java.time.Duration;
-import java.util.Map;
 
 import screens.BottomNavigation;
 import screens.LoginAndSignUpScreen;
@@ -219,10 +218,7 @@ public class TestCases {
 
     @AfterMethod(alwaysRun = true)
     public void afterMethodCleanup() {
-        driver.executeScript("mobile: terminateApp", Map.ofEntries(
-                Map.entry("appId", "com.wdiodemoapp"),
-                Map.entry("timeout", 1000)
-        ));
+        DriverMethods.terminateApp();
     }
 
     @AfterClass(alwaysRun = true)
