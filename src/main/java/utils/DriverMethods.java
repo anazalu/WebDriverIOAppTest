@@ -19,6 +19,19 @@ public class DriverMethods {
         DriverMethods.driver = driver;
     }
 
+    public static void activateApp() {
+        driver.executeScript("mobile: activateApp", Map.ofEntries(
+                Map.entry("appId", TestProperties.getProperty("appPackage"))
+        ));
+    }
+
+    public static void terminateApp() {
+        driver.executeScript("mobile: terminateApp", Map.ofEntries(
+                Map.entry("appId", "com.wdiodemoapp"),
+                Map.entry("timeout", 1000)
+        ));
+    }
+
     public static String getScreenshot() {
         return driver.getScreenshotAs(OutputType.BASE64);
     }
@@ -91,12 +104,6 @@ public class DriverMethods {
         tap.addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()));
         tap.addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
         driver.perform(List.of(tap));
-    }
-
-    public static void activateApp() {
-        driver.executeScript("mobile: activateApp", Map.ofEntries(
-                Map.entry("appId", TestProperties.getProperty("appPackage"))
-        ));
     }
 
     public static String getDeviceInfo () {
